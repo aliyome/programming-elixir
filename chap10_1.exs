@@ -29,6 +29,8 @@ Enum.zip [:a,:b], [1, 2]  # [a: 1, b: 2]
 Enum.with_index ["a", "b"]  # [{"a", 1}, {"b", 2}]
 Enum.reduce 1..10, &(&1 + &2)  # 55
 
+Enum.into 1..5, []  # [1,2,3,4,5]
+
 defmodule My do
   # 練習問題5
   def all?([], _pred), do: false
