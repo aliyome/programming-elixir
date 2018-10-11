@@ -72,3 +72,52 @@ defmodule Parse do
   defp _cal(ans, b, nil), do: ans
 end
 
+# バイナリ
+b = <<1,2,3>>
+byte_size b
+bit_size b
+
+b = <<1::size(2), 1::size(3)>>  # 01 001 (= 9)
+
+i = <<1>>
+f = <<2.5::float>>  # <<64, 4, 0,0,0,0,0,0>>
+mix = <<i::binary, f::binary>>  # <<1,64,4,0,0,0,0,0,0>>
+
+# IEEE754
+<<sign::size(1), exp::size(11), mantissa::size(52)>> = <<3.14159::float>>
+(1 + mantissa / :math.pow(2, 52)) * :math.pow(2, exp-1023)  # 3.14159
+
+# 文字列リストと文字列
+'文字列リスト'  # Unicodeコードポイント値 整数配列
+"文字列"  # ↑をUTF-8エンコードしたバイト列
+String.at("文字列", 0)  # "文"
+String.at("文字列", -1)  # "列"
+String.codepoints("文字列 ∂og")  # "文","字","列", " ","∂", "o", "g"
+String.first("文字列")  # "文"
+String.last("文字列")  # "列"
+# String.ljust("文字列", 5, padding \\ " ")
+String.ljust("文字列", 5)  # "文字列  "
+String.lstrip("   文字列")  # "文字列"
+# String.replace(str, pattern, replacement, options \\ [global: true, insert_replaced: nil])
+String.replace("cat hat", "at", "AT")  # cAT hAT
+String.replace("cat hat", "at", "AT", global: false)  # cAT hat
+
+
+# 練習問題5
+defmodule My do
+  def center(str_list) do
+    max = str_list
+      |> Enum.max_by(&String.length/1)
+      |> String.length
+    str_list
+    |> Enum.map(&(IO.puts _center(&1, max)))
+  end
+  def _center(str, length) do
+    len1 = div(length, 2)
+    len2 = div(String.length(str), 2)
+    space = round(len1 - len2)
+    String.duplicate(" ", space) <> str
+  end
+end
+My.center(["cat", "zebra", "elephant"])
+My.center(["ca", "zebra", "elephasdifant"])
