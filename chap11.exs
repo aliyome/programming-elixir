@@ -121,3 +121,31 @@ defmodule My do
 end
 My.center(["cat", "zebra", "elephant"])
 My.center(["ca", "zebra", "elephasdifant"])
+
+
+# バイナリとパターンマッチ
+
+defmodule Utf8 do
+  def each(str, f) when is_binary(str), do: _each(str, f)
+  defp _each(<<head::utf8, tail::binary>>, f) do
+    f.(head)
+    _each(tail, f)
+  end
+  defp _each(<<>>, _f), do: []
+end
+Utf8.each "∂og", &(IO.puts &1)
+
+
+# 練習問題6
+defmodule Str do
+  def capitalize_sentences(str) when is_binary(str) do
+    str
+    |> String.split(". ")
+    |> Enum.map(&(String.capitalize(&1)))
+    |> Enum.join(". ")
+  end
+end
+
+Str.capitalize_sentences("oh. a DOG. woof. ")  # "Oh. A dog. Woof. "
+
+# 練習問題7はパス
